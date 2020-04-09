@@ -22,15 +22,15 @@ object Extraction extends ExtractionInterface {
   def locateTemperatures(year: Year, stationsFile: String = "/stations.csv", temperaturesFile: String): Iterable[(LocalDate, Location, Temperature)] = {
     val stationDs: Dataset[StationModel] = spark.read.schema(stationsSchema)
       .option("mode", "DROPMALFORMED")
-      .csv(getAbsolutePath(stationsFile))
+      .csv(getRDDFromResource(stationsFile))
       .as[StationModel]
 
     val temperatureDs: Dataset[TemperatureModel] = spark.read.schema(temperatureSchema)
       .option("mode", "DROPMALFORMED")
-      .csv(getAbsolutePath(temperaturesFile))
+      .csv(getRDDFromResource(temperaturesFile))
       .as[TemperatureModel]
 
-    def toCelsius(value: Double): Temperature = (value - 32.0d) * 5.0d / 9.0d
+    val toCelsius = (value: Double) => (value - 32.0d) * 5.0d / 9.0d
 
     val joinCond: Column = stationDs("stn").eqNullSafe(temperatureDs("stn")) &&
       stationDs("wban").eqNullSafe(temperatureDs("wban")) &&

@@ -44,9 +44,9 @@ sealed trait Map extends js.Object {
 }
 
 case class MapOptions(
-                       @(JSExport@field) zoomControl: Boolean,
-                       @(JSExport@field) maxZoom: Int
-                     )
+  @(JSExport @field) zoomControl: Boolean,
+  @(JSExport @field) maxZoom: Int
+)
 
 @js.native
 sealed trait TileLayer extends js.Object {
@@ -66,8 +66,8 @@ sealed trait ControlFactory extends js.Object {
 sealed trait Control extends js.Object
 
 case class ZoomOptions(
-                        @(JSExport@field) position: String
-                      )
+  @(JSExport @field) position: String
+)
 
 @js.native
 sealed trait Zoom extends Control
@@ -81,7 +81,6 @@ sealed trait LatLngBounds extends js.Object
 @js.native
 sealed trait Layer extends js.Object {
   def addTo(map: Map): Unit = js.native
-
   def remove(): Unit = js.native
 }
 
@@ -93,14 +92,12 @@ sealed trait ImageLayer extends Layer {
 @js.native
 sealed trait Bounds extends js.Object {
   def getBottomLeft(): Point = js.native
-
   def getTopRight(): Point = js.native
 }
 
 @js.native
 sealed trait Point extends js.Object {
   def x: Double = js.native
-
   def y: Double = js.native
 }
 

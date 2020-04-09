@@ -1,14 +1,16 @@
 package observatory
 
 import leaflet.{L, MapOptions, ZoomOptions}
+
+import scala.scalajs.js
+import org.scalajs.dom.{Element, Event, Node, document}
 import org.scalajs.dom.html.Input
-import org.scalajs.dom.{Event, Node, document}
-import scalatags.JsDom._
+
 import scalatags.{DataConverters, LowPriorityImplicits}
+import scalatags.JsDom.{Cap, Aggregate, tags, attrs, styles}
 
 object Implicits extends Cap with Aggregate with DataConverters with LowPriorityImplicits
-
-import observatory.Implicits._
+import Implicits._
 
 object JSMain {
 
@@ -47,7 +49,6 @@ object JSMain {
   def makeRadioButtons(availableLayers: Seq[Layer]): (Frag, Signal[Layer]) = {
     val initialValue = availableLayers.head
     val radioButtonValue = Var[Layer](initialValue)
-
     def makeRadioButton(layer: Layer): Frag =
       tags.input(
         attrs.`type` := "radio",
@@ -58,7 +59,6 @@ object JSMain {
         },
         if (layer == initialValue) Some[Modifier](attrs.checked) else Option.empty[Modifier]
       )
-
     val root =
       tags.div(
         styles.position.absolute,
@@ -149,7 +149,6 @@ object JSMain {
 
   implicit def signalFrag[A](signalA: Signal[A])(implicit aToFrag: A => Frag): Frag = {
     def render(a: A): Node = tags.span(a).render
-
     var last = render(signalA())
     Signal {
       val current = render(signalA())

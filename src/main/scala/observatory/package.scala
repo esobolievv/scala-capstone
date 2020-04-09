@@ -1,6 +1,8 @@
-import org.apache.spark.sql.{Encoder, Encoders, SparkSession}
+import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.types.{DoubleType, IntegerType, StructField, StructType}
+import org.apache.spark.sql.{Dataset, Encoder, Encoders, SparkSession}
 
+import scala.io.Source
 import scala.reflect.ClassTag
 
 package object observatory {
@@ -14,7 +16,7 @@ package object observatory {
     .master("local[*]")
     .getOrCreate()
 
-  spark.sparkContext.setLogLevel("ERROR")
+  Logger.getLogger("org.apache.spark").setLevel(Level.WARN)
 
   val stationsSchema = StructType(Seq(
     StructField("stn", IntegerType, nullable = true),
@@ -42,5 +44,10 @@ package object observatory {
     * @param path Relative path starts from project resource dir (e.g. "/2015.csv")
     * @return
     */
-  def getAbsolutePath(path: String): String = getClass.getResource(path).getPath
+  def getRDDFromResource(resource: String): Dataset[String] = {
+    // For implicit conversions like converting RDDs to DataFrames, autoEncoders etc.
+    import spark.implicits._
+    val fileStream = Source.getClass.getResourceAsStream(resource)
+    spark.sparkContext.makeRDD(Source.fromInputStream(fileStream).getLines.toList).toDS
+  }
 }
