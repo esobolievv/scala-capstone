@@ -23,6 +23,9 @@ trait VisualizationTest extends MilestoneSuite {
   @Test
   def testVisualize(): Unit = {
     val image: Image = Visualization.visualize(avarageTempPerLocation, colors)
+    val file = new java.io.File("target/generatedImage.png")
+    if (!file.exists()) file.mkdir()
+    image.output(file)
     assertTrue(image.pixels.length == 360 * 180)
   }
 

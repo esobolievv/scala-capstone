@@ -2,9 +2,10 @@ package observatory
 
 import java.time.LocalDate
 
+import observatory.Spark._
 import org.apache.spark.sql._
 import org.apache.spark.sql.functions._
-import Spark._
+import org.apache.spark.sql.types.{DoubleType, IntegerType, StructField, StructType}
 
 /**
   * 1st milestone: data extraction
@@ -12,7 +13,27 @@ import Spark._
 object Extraction extends ExtractionInterface {
 
   // For implicit conversions like converting RDDs to DataFrames, autoEncoders etc.
+
   import spark.implicits._
+
+  val stationsSchema: StructType = StructType(
+    Seq(
+      StructField("stn", IntegerType, nullable = true),
+      StructField("wban", IntegerType, nullable = true),
+      StructField("lat", DoubleType, nullable = false),
+      StructField("lon", DoubleType, nullable = false)
+    )
+  )
+
+  val temperatureSchema: StructType = StructType(
+    Seq(
+      StructField("stn", IntegerType, nullable = true),
+      StructField("wban", IntegerType, nullable = true),
+      StructField("month", IntegerType, nullable = false),
+      StructField("day", IntegerType, nullable = false),
+      StructField("temperature", DoubleType, nullable = false)
+    )
+  )
 
   /**
     * @param year             Year number

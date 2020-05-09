@@ -1,6 +1,7 @@
 package observatory
 
 import java.lang.Math.{PI, atan, sinh}
+import java.net.URI
 
 import scala.math._
 
@@ -75,7 +76,7 @@ case class Tile(x: Int, y: Int, zoom: Int) {
     x / (1 << zoom) * 360.0 - 180.0
   }
 
-  def toURI = new java.net.URI(s"https://tile.openstreetmap.org/$zoom/$x/$y.png")
+  def toURI = new URI(s"https://tile.openstreetmap.org/$zoom/$x/$y.png")
 }
 
 case object Tile {

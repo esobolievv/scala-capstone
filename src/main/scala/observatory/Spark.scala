@@ -2,7 +2,6 @@ package observatory
 
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.{Dataset, Encoder, Encoders, SparkSession}
-import org.apache.spark.sql.types.{DoubleType, IntegerType, StructField, StructType}
 
 import scala.io.Source
 import scala.reflect.ClassTag
@@ -13,23 +12,11 @@ object Spark {
     .builder()
     .appName("Spark capstone observatory")
     .master("local[*]")
+    .config("spark.driver.memory", "4g")
+    .config("spark.driver.cores", 4)
     .getOrCreate()
 
   Logger.getLogger("org.apache.spark").setLevel(Level.WARN)
-
-  lazy val stationsSchema: StructType = StructType(Seq(
-    StructField("stn", IntegerType, nullable = true),
-    StructField("wban", IntegerType, nullable = true),
-    StructField("lat", DoubleType, nullable = false),
-    StructField("lon", DoubleType, nullable = false)))
-
-  lazy val temperatureSchema: StructType = StructType(Seq(
-    StructField("stn", IntegerType, nullable = true),
-    StructField("wban", IntegerType, nullable = true),
-    StructField("month", IntegerType, nullable = false),
-    StructField("day", IntegerType, nullable = false),
-    StructField("temperature", DoubleType, nullable = false)))
-
 
   implicit def single[A](implicit c: ClassTag[A]): Encoder[A] = Encoders.kryo[A](c)
 
