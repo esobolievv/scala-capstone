@@ -1,7 +1,8 @@
 package observatory
 
+import java.time.LocalDate
+
 import org.junit.Assert._
-import org.scalacheck.Test
 
 class CapstoneSuite
   extends ExtractionTest
@@ -12,6 +13,12 @@ class CapstoneSuite
     with Interaction2Test
 
 trait MilestoneSuite {
+
+  lazy val temperatures: Iterable[(LocalDate, Location, Temperature)] = Extraction
+    .locateTemperatures(2015, temperaturesFile = "/2015.csv")
+
+  lazy val avarageTempPerLocation: Iterable[(Location, Temperature)] = Extraction
+    .locationYearlyAverageRecords(temperatures)
 
   def namedMilestoneTest(milestoneName: String, level: Int)(block: => Unit): Unit =
     if (Grading.milestone >= level) {

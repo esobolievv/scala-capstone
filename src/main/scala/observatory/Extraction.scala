@@ -4,6 +4,7 @@ import java.time.LocalDate
 
 import org.apache.spark.sql._
 import org.apache.spark.sql.functions._
+import Spark._
 
 /**
   * 1st milestone: data extraction

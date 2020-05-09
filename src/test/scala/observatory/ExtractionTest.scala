@@ -9,9 +9,8 @@ trait ExtractionTest extends MilestoneSuite {
 
   @Test
   def testHappyPath(): Unit = {
-    val temperatures = Extraction.locateTemperatures(2015, temperaturesFile = "/2015.csv")
     assertEquals(36, temperatures.size)
-    assertEquals(2, Extraction.locationYearlyAverageRecords(temperatures).size)
+    assertEquals(2, avarageTempPerLocation.size)
   }
 
 }
