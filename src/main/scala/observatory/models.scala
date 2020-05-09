@@ -12,7 +12,7 @@ import scala.math._
   */
 case class Location(lat: Double, lon: Double) {
   // we need to have radius of Earth, cause we must calculate distance based on radius
-  val EarthRadius: Double = (1d / 3d) * (2d * 6378.137 + 6356.752)
+  val EarthRadius: Double = 6371.0088 // (1d / 3d) * (2d * 6378.137 + 6356.752)
   val P: Double = 2.0
   val Radian: Double = Pi / 180
 
@@ -22,7 +22,11 @@ case class Location(lat: Double, lon: Double) {
   def calcDist(that: Location): Double = {
     val (rad1, rad2) = (this.toRadian, that.toRadian)
     val lonDeltaLambda = abs(rad1.lon - rad2.lon)
-    val deltaDistance = acos(sin(rad1.lat) * sin(rad2.lat) + cos(rad1.lat * cos(rad2.lat)) * cos(lonDeltaLambda))
+
+    val deltaDistance = if (rad1.lat == rad2.lat && rad1.lon == rad2.lon) 0
+    else if (rad1.lat == -rad2.lat && rad1.lon == -rad2.lon) Pi
+    else acos(sin(rad1.lat) * sin(rad2.lat) + cos(rad1.lat) * cos(rad2.lat) * cos(lonDeltaLambda))
+
     EarthRadius * deltaDistance
   }
 
